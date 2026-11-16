@@ -3,6 +3,7 @@ package com.taskhub.TaskHub.controller;
 import com.taskhub.TaskHub.dto.CommentRequestDto;
 import com.taskhub.TaskHub.dto.CommentResponseDto;
 import com.taskhub.TaskHub.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{taskId}/comments")
-    public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long taskId, @RequestBody CommentRequestDto dto){
+    public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long taskId,@Valid @RequestBody CommentRequestDto dto){
         CommentResponseDto createdComment = commentService.addComment(taskId,dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
@@ -27,7 +28,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,@RequestBody CommentRequestDto dto){
+    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,@Valid @RequestBody CommentRequestDto dto){
         CommentResponseDto updatedComment = commentService.updateComment(commentId,dto);
         return ResponseEntity.ok(updatedComment);
     }

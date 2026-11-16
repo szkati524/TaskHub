@@ -5,9 +5,11 @@ import com.taskhub.TaskHub.dto.TaskResponseDto;
 import com.taskhub.TaskHub.entity.Task;
 import com.taskhub.TaskHub.enums.TaskStatus;
 import com.taskhub.TaskHub.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class TaskController {
 
 
     @PostMapping
-    public ResponseEntity<TaskResponseDto> createTask(@RequestBody TaskRequestDto dto){
+    public ResponseEntity<TaskResponseDto> createTask(@Valid @RequestBody TaskRequestDto dto){
         TaskResponseDto savedTask =  taskService.createTask(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
     }
@@ -36,7 +38,7 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
 }
 @PutMapping("/{id}")
-    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long id,@RequestBody TaskRequestDto dto){
+    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long id,@Valid @RequestBody TaskRequestDto dto){
         TaskResponseDto updatedTask = taskService.updateTask(id,dto);
         return ResponseEntity.ok(updatedTask);
 }

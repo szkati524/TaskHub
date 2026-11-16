@@ -5,6 +5,7 @@ import com.taskhub.TaskHub.dto.CommentResponseDto;
 import com.taskhub.TaskHub.entity.Comment;
 import com.taskhub.TaskHub.entity.Task;
 import com.taskhub.TaskHub.entity.User;
+import com.taskhub.TaskHub.exception.ResourceNotFoundException;
 import com.taskhub.TaskHub.repository.CommentRepository;
 import com.taskhub.TaskHub.repository.TaskRepository;
 import com.taskhub.TaskHub.repository.UserRepository;
@@ -31,7 +32,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono zadania o Id: " + taskId));
         User author = userRepository.findAll().stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Brak użytkowników w bazie! Stwórz najpierw!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Brak użytkowników w bazie! Stwórz najpierw!"));
 
         Comment comment = new Comment();
         comment.setContent(dto.content());
@@ -43,7 +44,7 @@ return toDto(savedComment);
 
     public List<CommentResponseDto > getCommentsByTaskId(Long taskId){
         if (!taskRepository.existsById(taskId)){
-            throw  new RuntimeException("Nie znaleziono zadania o Id: " + taskId    );
+            throw  new ResourceNotFoundException("Nie znaleziono zadania o Id: " + taskId    );
         }
         return commentRepository.findByTaskId(taskId).stream()
                 .map(this::toDto)
@@ -52,7 +53,7 @@ return toDto(savedComment);
     @Transactional
     public CommentResponseDto updateComment(Long commentId,CommentRequestDto dto){
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono komentarza o ID: " + commentId));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono komentarza o ID: " + commentId));
         comment.setContent(dto.content());
         Comment updatedComment = commentRepository.save(comment);
         return toDto(updatedComment);
@@ -60,7 +61,7 @@ return toDto(savedComment);
     @Transactional
     public void deleteComment(Long commentId){
         if (!commentRepository.existsById(commentId)){
-            throw  new RuntimeException("Nie znaleziono komentarza o Id: " + commentId);
+            throw  new ResourceNotFoundException("Nie znaleziono komentarza o Id: " + commentId);
         }
         commentRepository.deleteById(commentId);
     }

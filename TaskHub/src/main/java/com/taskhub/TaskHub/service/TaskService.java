@@ -4,6 +4,7 @@ import com.taskhub.TaskHub.dto.TaskRequestDto;
 import com.taskhub.TaskHub.dto.TaskResponseDto;
 import com.taskhub.TaskHub.entity.Task;
 import com.taskhub.TaskHub.enums.TaskStatus;
+import com.taskhub.TaskHub.exception.ResourceNotFoundException;
 import com.taskhub.TaskHub.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -28,7 +29,7 @@ public class TaskService {
     }
     public TaskResponseDto findById(Long id){
        Task task = taskRepository.findById(id)
-               .orElseThrow(() -> new RuntimeException("Nie znaleziono zadania o ID: " + id));
+               .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono zadania o ID: " + id));
        return toDto(task);
     }
     public List<TaskResponseDto> findAllTasks(){
@@ -39,7 +40,7 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTask(Long id,TaskRequestDto requestDto){
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono zadania o ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono zadania o ID: " + id));
         task.setTitle(requestDto.title());
         task.setDescription(requestDto.description());
         task.setPriority(requestDto.priority());
@@ -50,7 +51,7 @@ public class TaskService {
     @Transactional
     public void deleteTask(Long id){
        if (!taskRepository.existsById(id)){
-           throw new RuntimeException("Nie znaleziono zadania o Id: " + id);
+           throw new ResourceNotFoundException("Nie znaleziono zadania o Id: " + id);
 
        }
        taskRepository.deleteById(id);

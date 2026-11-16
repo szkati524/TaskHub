@@ -3,6 +3,7 @@ package com.taskhub.TaskHub.service;
 import com.taskhub.TaskHub.dto.UserRequestDto;
 import com.taskhub.TaskHub.dto.UserResponseDto;
 import com.taskhub.TaskHub.entity.User;
+import com.taskhub.TaskHub.exception.ResourceNotFoundException;
 import com.taskhub.TaskHub.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class UserService {
    @Transactional
     public UserResponseDto createUser(UserRequestDto dto) {
        if (userRepository.findByUsername(dto.username()).isPresent()) {
-           throw new RuntimeException("Użytkownik o nazwie " + dto.username() + " już istnieje");
+           throw new ResourceNotFoundException("Użytkownik o nazwie " + dto.username() + " już istnieje");
        }
        User user = new User();
        user.setUsername(dto.username());
@@ -31,7 +32,7 @@ public class UserService {
    }
     public UserResponseDto findById(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono użytkownika o Id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Nie znaleziono użytkownika o Id: " + id));
         return toDto(user);
     }
     public List<UserResponseDto> findAllUsers(){
@@ -47,7 +48,8 @@ public class UserService {
        return new UserResponseDto(
                user.getId(),
                user.getUsername(),
-               user.getEmail()
+               user.getEmail(),
+               user.getRole()
        );
     }
 }

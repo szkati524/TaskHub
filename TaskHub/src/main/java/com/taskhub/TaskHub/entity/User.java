@@ -1,15 +1,16 @@
 package com.taskhub.TaskHub.entity;
 
+import com.taskhub.TaskHub.enums.Role;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
 
     @Id
@@ -21,4 +22,10 @@ public class User {
 
     @Column(nullable = false)
     private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }

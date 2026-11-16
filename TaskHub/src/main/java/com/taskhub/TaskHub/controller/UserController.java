@@ -3,6 +3,7 @@ package com.taskhub.TaskHub.controller;
 import com.taskhub.TaskHub.dto.UserRequestDto;
 import com.taskhub.TaskHub.dto.UserResponseDto;
 import com.taskhub.TaskHub.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto requestDto){
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto requestDto){
         UserResponseDto createdUser = userService.createUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
