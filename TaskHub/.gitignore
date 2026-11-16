@@ -1,0 +1,34 @@
+# --- Maven ---
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# --- Eclipse / VS Code (opcjonalnie) ---
+.settings/
+.project
+.classpath
+.vscode/
+
+# --- Systemowe ---
+.DS_Store
+Thumbs.db
+*.log
+
+# --- Baza danych (H2 w pamięci zazwyczaj nie tworzy plików na dysku, ale na wszelki wypadek) ---
+*.h2.db
+*.mv.db
+*.trace.db
