@@ -12,5 +12,6 @@ public record TaskRequestDto(@NotBlank(message = "tytuł nie może być pusty")
                              @NotNull(message = "Priorytet jest wymagany")
                              TaskPriority priority,
                               @ValidCategory
-                              String category) {
+                              String category,
+                             Long assigneeId) {
 }

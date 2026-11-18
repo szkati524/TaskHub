@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,8 +19,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{taskId}/comments")
-    public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long taskId,@Valid @RequestBody CommentRequestDto dto){
-        CommentResponseDto createdComment = commentService.addComment(taskId,dto);
+    public ResponseEntity<CommentResponseDto> addComment(@PathVariable Long taskId, @Valid @RequestBody CommentRequestDto dto, Principal principal){
+        CommentResponseDto createdComment = commentService.addComment(taskId,dto,principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
     @GetMapping("/{taskId}/comments")
@@ -28,13 +29,13 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,@Valid @RequestBody CommentRequestDto dto){
-        CommentResponseDto updatedComment = commentService.updateComment(commentId,dto);
+    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,@Valid @RequestBody CommentRequestDto dto,Principal principal){
+        CommentResponseDto updatedComment = commentService.updateComment(commentId,dto,principal.getName());
         return ResponseEntity.ok(updatedComment);
     }
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId){
-        commentService.deleteComment(commentId);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,Principal principal){
+        commentService.deleteComment(commentId,principal.getName());
         return ResponseEntity.noContent().build();
     }
 

@@ -12,5 +12,7 @@ public record TaskResponseDto(Long id,
                               TaskPriority priority,
                               String category,
                               LocalDateTime createdAt,
-                              LocalDateTime updatedAt) {
+                              LocalDateTime updatedAt,
+                              Long assigneeId,
+                              String assigneeUsername) {
 }

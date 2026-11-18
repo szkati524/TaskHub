@@ -24,5 +24,23 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
             userRepository.save(admin);
         }
+        if (userRepository.findByUsername("pm_user").isEmpty()) {
+            User pm = User.builder()
+                    .username("pm_user")
+                    .email("pm@taskhub.com")
+                    .password(passwordEncoder.encode("pm123"))
+                    .role(Role.ROLE_PM)
+                    .build();
+            userRepository.save(pm);
+        }
+        if (userRepository.findByUsername("worker_jan").isEmpty()) {
+            User worker = User.builder()
+                    .username("worker_jan")
+                    .email("jan@taskhub.com")
+                    .password(passwordEncoder.encode("worker123"))
+                    .role(Role.ROLE_PM)
+                    .build();
+            userRepository.save(worker);
+        }
     }
 }

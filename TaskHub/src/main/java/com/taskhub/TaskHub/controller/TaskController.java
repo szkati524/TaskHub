@@ -7,11 +7,15 @@ import com.taskhub.TaskHub.enums.TaskStatus;
 import com.taskhub.TaskHub.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,7 @@ public class TaskController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PM')")
     public ResponseEntity<TaskResponseDto> createTask(@Valid @RequestBody TaskRequestDto dto){
         TaskResponseDto savedTask =  taskService.createTask(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
@@ -42,9 +47,24 @@ public class TaskController {
         TaskResponseDto updatedTask = taskService.updateTask(id,dto);
         return ResponseEntity.ok(updatedTask);
 }
+@PatchMapping("/{id}/status")
+public ResponseEntity<TaskResponseDto> updateTaskStatus(@PathVariable Long id, @RequestParam TaskStatus status, Principal principal){
+        TaskResponseDto dto = taskService.updateTaskStatus(id,status,principal.getName());
+        return ResponseEntity.ok(dto);
+}
+@GetMapping("/search")
+public ResponseEntity<List<TaskResponseDto>> searchTasks(
+        @RequestParam(required = false) TaskStatus status,
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime createdAfter
+        ){
+        List<TaskResponseDto> tasks = taskService.searchTasks(status,category,createdAfter);
+        return ResponseEntity.ok(tasks);
+}
 @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
 }
+
 }
